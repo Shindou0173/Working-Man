@@ -2,6 +2,7 @@ package com.ttvhtttt.workingmanager.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,4 +30,6 @@ public class PageController {
     }
     @GetMapping("/evaluate/{taskID}")
     public String eval(@PathVariable String taskID){ return "evaluate"; }
+    @GetMapping("/profile")
+    public String profile(@CookieValue(name = "user") String user){ return "profile"; }
 }
