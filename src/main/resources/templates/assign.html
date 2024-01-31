@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Giao việc cho người khac</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+
+        #userSuggestionList li {
+            list-style: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #userSuggestionList li:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+
+</head>
+<body style="background-color: #F0F0F0">
+
+<!--HEADER START-->
+
+<div class="d-inline-flex" style="width: 80%; margin-left: 10%; border: solid black; border-radius: 10px;">
+    <!-- Logo start -->
+    <div>
+        <button id="home" type="button" class="btn btn-light" style="border: #F0F0F0;">
+            <img src="/working-man.jpg" class="img-fluid" style="width: 100px; height: 50px">
+            <h1>Working Man</h1>
+        </button>
+    </div>
+    <!-- Logo end -->
+    <div class="d-inline-flex">
+        <!-- Navbar Start -->
+        <nav class="navbar navbar-expand-lg navbar-dark" style="width: 100%; margin-top: 40px;">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button id="MyTask" type="button" class="nav-link" style="margin-top: -5%; margin-left: 20%; width: 200px;color: black; font-size: 20px; font-weight: bolder;">
+                            VIỆC CỦA TÔI
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="Assign" type="button" class="nav-link" style="color: black; margin-top: -5%; margin-left: 20%; width: 200px; font-size: 20px; font-weight: inherit;">
+                            VIỆC TÔI GIAO
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="Report" type="button" class="nav-link" style="color: black; margin-top: -5%; margin-left: 20%; width: 200px; font-size: 20px; font-weight: inherit;">
+                            BÁO CÁO
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="Statistic" type="button" class="nav-link" style="color: black; margin-top: -5%; margin-left: 20%; width: 200px; font-size: 20px; font-weight: inherit;">
+                            THỐNG KÊ
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Navbar End -->
+
+        <!-- User field start -->
+        <div class="dropdown" style="margin-top: 2% ;margin-left: 10%; margin-right: 2%;">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="../Truong Nguyen Phu Quy Photo.jpg" alt="Profile" class="profile-image" width="30%;" style="border-radius: 50%;">
+                Xin chào, Phú Quý
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Hồ sơ</a>
+                <a class="dropdown-item" href="http://localhost:8080/login">Đăng xuất</a>
+            </div>
+        </div>
+        <!-- User field end -->
+    </div>
+</div>
+<div class="d-inline-flex" style="width: 80%; margin-left: 10%; border: solid white; border-radius: 10px;">
+</div>
+<!--HEADER END-->
+
+
+<!--BODY START-->
+
+<div id="Body" class="d-inline-flex" style="width: 80%; margin-left: 10%; border: solid black; border-radius: 10px; padding-bottom: 5%;">
+    <form id="formTask" action="" class="form-control border-1 p-4" style="margin-top: 2%; border: 2px solid black; margin-left: 23%; border-radius: 10px; width: 800px;">
+        <h1 class="text-center">Tạo một công việc mới</h1>
+        <div class="mb-3 text-center">
+            <label for="TaskDescription" class="form-label font-weight-bold">CÔNG VIỆC</label>
+            <input id="TaskDescription" type="text" class="form-control" style="border-radius: 20px;">
+        </div>
+        <div class="mb-3 text-center">
+            <label for="Deadline" class="form-label font-weight-bold">THỜI HẠN</label>
+            <input id="Deadline" type="date" class="form-control" style="border-radius: 20px;">
+        </div>
+        <div class="mb-3 text-center">
+            <label for="Issue" class="form-label font-weight-bold">GHI CHÚ</label>
+            <input id="Issue" type="text" class="form-control" style="border-radius: 20px;">
+        </div>
+        <!-- Dropdown User choice -->
+        <div class="search-container mb-3 text-center">
+            <label for="userInput" class="form-label font-weight-bold">NGƯỜI ĐƯỢC GIAO</label>
+            <input id="userInput" class="form-control" type="text" placeholder="Search Users..." style="border-radius: 20px;">
+            <ul id="userSuggestionList"></ul>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary" style="border-radius: 10px; width: 150px;">GIAO VIỆC</button>
+        </div>
+    </form>
+</div>
+
+<!--BODY END-->
+
+
+<script>
+    $('#home').on('click', function(){
+        window.location.href='http://localhost:8080/'
+    })
+    $('#MyTask').on('click', function(){
+        window.location.href='http://localhost:8080/'
+    })
+    $('#Assign').on('click', function(){
+        window.location.href='http://localhost:8080/'
+    })
+    $('#Statistic').on('click', function(){
+        window.location.href='http://localhost:8080/'
+    });
+
+    // Task fetching here
+    const pathname = window.location.pathname;
+
+    const parts = pathname.split('/');
+
+    const taskID = parts[parts.length - 1];
+    $(document).ready(function (){
+        $.ajax({
+            url : 'http://localhost:8080/task/find/'+taskID,
+            type: 'GET',
+            success: function (response){
+                $('#TaskDescription').val(response.taskDescription);
+                $('#Deadline').val(response.deadline);
+            }, error: function (xhr, status, error){
+                console.log(error);
+            }
+        })
+    })
+    $(document).ready(function (){
+        $.ajax({
+            url : 'http://localhost:8080/issue/find/'+taskID,
+            type: 'GET',
+            success: function (response){
+                $('#Issue').val(response.description);
+            }, error: function (xhr, status, error){
+                console.log(error);
+            }
+        })
+    })
+
+
+    // User fetching here
+    $.ajax({
+        url: 'http://localhost:8080/user/all',
+        type: 'GET',
+        success: function (response) {
+            var allUsers = response.map(user => {
+                return {
+                    id: user.userID,
+                    username: user.username
+                };
+            });
+            const selectedUsers = [];
+            function updateUserSuggestions(inputValue) {
+                const userSuggestionList = $('#userSuggestionList');
+                userSuggestionList.empty();
+
+                if (inputValue) {
+                    const usernames = inputValue.split(',').map(username => username.trim());
+
+                    usernames.forEach(username => {
+                        const filteredUsers = allUsers.filter(user =>
+                            user.username && user.username.toLowerCase().includes(username.toLowerCase())
+                        );
+
+                        filteredUsers.forEach(user => {
+                            // Check if the user is not already selected
+                            if (!selectedUsers.includes(user.username)) {
+                                const listItem = $('<li>' + user.username + '</li>');
+                                listItem.on('click', function () {
+                                    // Delete existing username and append the selected user.username
+                                    const updatedValue = inputValue.replace(username || '', '') + user.username + ', ';
+                                    $('#userInput').val(updatedValue); // Use val() to set the input value
+                                    // Hide user suggestion list
+                                    userSuggestionList.hide();
+
+                                    // Add the selected user to the selectedUsers array
+                                    selectedUsers.push(user.username);
+                                });
+                                userSuggestionList.append(listItem);
+                            }
+                        });
+                    });
+                }
+
+                // Show/hide user suggestion list based on the number of suggestions
+                userSuggestionList.toggle(userSuggestionList.children().length > 0);
+            }
+
+            // Listen for the input event on the user input
+            $('#userInput').on('input', function () {
+                const inputValue = $(this).val();
+                updateUserSuggestions(inputValue);
+            });
+
+            // Close user suggestion list when clicking outside the search container
+            $(document).on('click', function (event) {
+                const searchContainer = $('.search-container');
+                const suggestionList = $('#userSuggestionList');
+
+                if (!searchContainer.is(event.target) && searchContainer.has(event.target).length === 0 &&
+                    !suggestionList.is(event.target) && suggestionList.has(event.target).length === 0) {
+                    suggestionList.hide();
+                }
+            });
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+        }
+    });
+
+
+    document.getElementById('formTask').addEventListener('submit', function(event){
+        event.preventDefault();
+        var formData = {
+            taskID : taskID,
+            taskRecipient: document.getElementById('userInput').value
+        }
+        console.log(formData)
+        $.ajax({
+            url: 'http://localhost:8080/assign/giving',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                alert("Giao việc thành công!!");
+                window.location.replace("http://localhost:8080")
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+    })
+</script>
+</body>
+</html>

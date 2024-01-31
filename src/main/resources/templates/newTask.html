@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tạo một công việc mới</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body style="background-color: #F0F0F0">
+
+<!--HEADER START-->
+
+<div class="d-inline-flex" style="width: 80%; margin-left: 10%; border: solid black; border-radius: 10px;">
+    <!-- Logo start -->
+    <div>
+        <button id="home" type="button" class="btn btn-light" style="border: #F0F0F0;">
+            <img src="/working-man.jpg" class="img-fluid" style="width: 100px; height: 50px">
+            <h1>Working Man</h1>
+        </button>
+    </div>
+    <!-- Logo end -->
+    <div class="d-inline-flex">
+        <!-- Navbar Start -->
+        <nav class="navbar navbar-expand-lg navbar-dark" style="width: 100%; margin-top: 40px;">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button id="MyTask" type="button" class="nav-link" style="margin-top: -5%; margin-left: 20%; width: 200px;color: black; font-size: 20px; font-weight: bolder;">
+                            VIỆC CỦA TÔI
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="Assign" type="button" class="nav-link" style="color: black; margin-top: -5%; margin-left: 20%; width: 200px; font-size: 20px; font-weight: inherit;">
+                            VIỆC TÔI GIAO
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="Report" type="button" class="nav-link" style="color: black; margin-top: -5%; margin-left: 20%; width: 200px; font-size: 20px; font-weight: inherit;">
+                            BÁO CÁO
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="Statistic" type="button" class="nav-link" style="color: black; margin-top: -5%; margin-left: 20%; width: 200px; font-size: 20px; font-weight: inherit;">
+                            THỐNG KÊ
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Navbar End -->
+
+        <!-- User dropdown field start -->
+        <div class="dropdown" style="margin-top: 2% ;margin-left: 10%; margin-right: 2%;">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="Truong Nguyen Phu Quy Photo.jpg" alt="Profile" class="profile-image" width="30%;" style="border-radius: 50%;">
+                Xin chào, Phú Quý
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Hồ sơ</a>
+                <a class="dropdown-item" href="http://localhost:8080/login">Đăng xuất</a>
+            </div>
+        </div>
+        <!-- User field end -->
+    </div>
+</div>
+<div class="d-inline-flex" style="width: 80%; margin-left: 10%; border: solid white; border-radius: 10px;">
+</div>
+<!--HEADER END-->
+
+
+<!--BODY START-->
+
+<div id="Body" class="d-inline-flex" style="width: 80%; margin-left: 10%; border: solid black; border-radius: 10px; padding-bottom: 5%;">
+    <form id="formTask" action="" class="form-control border-1 p-4" style="margin-top: 2%; border: 2px solid black; margin-left: 23%; border-radius: 10px; width: 800px;">
+        <h1 class="text-center">Tạo một công việc mới</h1>
+        <div class="mb-3 text-center">
+            <label for="TaskDescription" class="form-label font-weight-bold">CÔNG VIỆC</label>
+            <input id="TaskDescription" type="text" class="form-control" style="border-radius: 20px;">
+        </div>
+        <div class="mb-3 text-center">
+            <label for="Deadline" class="form-label font-weight-bold">THỜI HẠN</label>
+            <input id="Deadline" type="date" class="form-control" style="border-radius: 20px;">
+        </div>
+        <div class="mb-3 text-center">
+            <label for="Issue" class="form-label font-weight-bold">GHI CHÚ</label>
+            <input id="Issue" type="text" class="form-control" style="border-radius: 20px;">
+        </div>
+        <!-- Dropdown User choice -->
+        <div class="mb-3 text-center">
+            <label for="userDropdown" class="form-label font-weight-bold">NGƯỜI TIẾP NHẬN</label>
+            <select id="userDropdown" class="form-select" style="border-radius: 20px;" required>
+                <!-- Options will be dynamically added here -->
+            </select>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary" style="border-radius: 10px; width: 150px;">TẠO</button>
+        </div>
+    </form>
+</div>
+
+<!--BODY END-->
+
+
+<script>
+    $('#home').on('click', function(){
+        window.location.href='http://localhost:8080/'
+    })
+    $('#MyTask').on('click', function(){
+        window.location.href='http://localhost:8080/'
+    })
+    $('#Assign').on('click', function(){
+        window.location.href='http://localhost:8080/'
+    })
+    $('#Statistic').on('click', function(){
+        window.location.href='http://localhost:8080/'
+    });
+    $(document).ready(function (){
+
+    })
+    // User fetching here
+    $.ajax({
+        url: 'http://localhost:8080/user/all',
+        type: 'GET',
+        success: function (users) {
+            const dropdown = $('#userDropdown');
+            dropdown.empty();
+            // Add a default option
+            dropdown.append($('<option>', {
+                value: '',
+                text: ''
+            }));
+
+            // Populate the dropdown with user data
+            $.each(users, function (index, user) {
+                dropdown.append($('<option>', {
+                    value: user.id,
+                    text: user.username
+                }));
+            });
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+        }
+    });
+
+    document.getElementById('formTask').addEventListener('submit', function(event){
+        event.preventDefault();
+        var formData = {
+            taskDescription: document.getElementById('TaskDescription').value,
+            deadline: document.getElementById('Deadline').value,
+            issue: document.getElementById('Issue').value,
+            taskRecipient: document.getElementById('userDropdown').value
+        }
+        $.ajax({
+            url: 'task/save',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                alert("Tạo công việc mới thành công!!");
+                history.back();
+                $('#Assign').trigger('click');
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+    })
+</script>
+</body>
+</html>

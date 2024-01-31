@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bảng làm việc</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body style="background-color: #F0F0F0">
+<!--HEADER START-->
+
+<div class="d-inline-flex" style="width: 80%; margin-left: 10%; border: solid black; border-radius: 10px;">
+    <!-- Logo start -->
+    <div>
+        <button id="home" type="button" class="btn btn-light" style="border: #F0F0F0;">
+            <img src="/working-man.jpg" class="img-fluid" style="width: 100px; height: 50px">
+            <h1>Working Man</h1>
+        </button>
+    </div>
+    <!-- Logo end -->
+    <div class="d-inline-flex">
+        <!-- Navbar Start -->
+        <nav class="navbar navbar-expand-lg navbar-dark" style="width: 100%; margin-top: 40px;">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </nav>
+        <!-- Navbar End -->
+
+        <!-- User field start -->
+        <div class="dropdown d-flex align-content-end" style="margin-top: 1% ;margin-left: 100%; margin-right: 2%; width: 50%;">
+            <a href="login">
+                <button class="btn btn-secondary dropdown-toggle" type="button" style="margin-top: 30%;">
+                    Đăng nhập
+                </button>
+            </a>
+        </div>
+        <!-- User field end -->
+    </div>
+</div>
+
+<div class="d-inline-flex" style="width: 80%; margin-left: 10%; border: solid black; border-radius: 10px;">
+</div>
+<!--HEADER END-->
+<!--BODY START-->
+
+<div id="Body" class="d-inline-flex" style="width: 80%; margin-left: 10%; border: solid black; border-radius: 10px; padding-bottom: 5%;">
+    <form id="formLogin" action="" class="border border-dark rounded p-4 mx-auto" style="max-width: 800px; margin-top: 2%;">
+        <h1 class="text-center mb-4">Đăng nhập Working Man</h1>
+
+        <div class="form-group text-center">
+            <label class="font-weight-bold">TÀI KHOẢN</label>
+            <input id="username" type="text" class="form-control" style="border-radius: 20px;" required>
+        </div>
+
+        <div class="form-group text-center">
+            <label class="font-weight-bold">MẬT KHẨU</label>
+            <input id="password" type="password" class="form-control" style="border-radius: 20px;" required>
+        </div>
+        <input id="loginBtn" type="submit" value="ĐĂNG NHẬP" style="margin-left: 7%; margin-top: 20px; border-radius: 10px; width: 150px; height: 50px; color: white; background-color: royalblue">
+        <button type="button" onclick="window.location.href='http://localhost:8080/register';" style="margin-left: 90px; margin-top: 20px; border-radius: 10px; width: 150px; height: 50px; color: white; background-color: royalblue">ĐĂNG KÝ</button>
+    </form>
+</div>
+<!--BODY END-->
+<!--Execute here-->
+<script>
+    document.getElementById('formLogin').addEventListener('submit', function (event){
+        event.preventDefault();
+
+        var formData ={
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value
+        };
+
+        $.ajax({
+            url: 'user/login',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                alert('Đăng nhập thành công!!');
+                window.location.replace('http://localhost:8080');
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    })
+</script>
+</body>
+</html>

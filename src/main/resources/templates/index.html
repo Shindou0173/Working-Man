@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bảng làm việc</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+    <style>
+        /* Add your custom CSS styles here */
+        .kanban-board {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .kanban-column {
+            flex: 1;
+            margin: 10px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .kanban-card {
+            background-color: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="background-color: #F0F0F0">
+
+<!--HEADER START-->
+
+<div class="d-inline-flex" style="width: 80%; margin-left: 10%; border: solid black; border-radius: 10px;">
+    <!-- Logo start -->
+    <div>
+        <button id="home" type="button" class="btn btn-light" style="border: #F0F0F0;">
+            <img src="/working-man.jpg" class="img-fluid" style="width: 100px; height: 50px">
+            <h1>Working Man</h1>
+        </button>
+    </div>
+    <!-- Logo end -->
+    <div class="d-inline-flex">
+        <!-- Navbar Start -->
+        <nav class="navbar navbar-expand-lg navbar-dark" style="width: 100%; margin-top: 40px;">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button id="MyTask" type="button" class="nav-link" style="margin-top: -5%; margin-left: 20%; width: 200px;color: black; font-size: 20px; font-weight: bolder;">
+                            VIỆC CỦA TÔI
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="Assign" type="button" class="nav-link" style="color: black; margin-top: -5%; margin-left: 20%; width: 200px; font-size: 20px; font-weight: inherit;">
+                            VIỆC TÔI GIAO
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="Report" type="button" class="nav-link" style="color: black; margin-top: -5%; margin-left: 20%; width: 200px; font-size: 20px; font-weight: inherit;">
+                            BÁO CÁO
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="Statistic" type="button" class="nav-link" style="color: black; margin-top: -5%; margin-left: 20%; width: 200px; font-size: 20px; font-weight: inherit;">
+                            THỐNG KÊ
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Navbar End -->
+
+        <!-- User field start -->
+        <div class="dropdown" style="margin-top: 2% ;margin-left: 10%; margin-right: 2%;">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="Truong Nguyen Phu Quy Photo.jpg" alt="Profile" class="profile-image" width="30%;" style="border-radius: 50%;">
+            </button>
+            <h4 id="hello" class="d-flex justify-content-center">Xin chào, </h4>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Hồ sơ</a>
+                <a class="dropdown-item" href="http://localhost:8080/login">Đăng xuất</a>
+            </div>
+        </div>
+        <!-- User field end -->
+    </div>
+</div>
+<div class="d-inline-flex" style="width: 80%; margin-left: 10%; border: solid white; border-radius: 10px;">
+</div>
+<!--HEADER END-->
+
+
+<!--BODY START-->
+
+<div class="d-inline-flex justify-content-center align-items-center" style="width: 80%; margin-left: 10%; border: solid black; border-radius: 10px;">
+    <div id="Body" class="container container-fluid mt-5">
+        <form id="formStatistic">
+
+        </form>
+    </div>
+</div>
+
+<!--BODY END-->
+
+
+<script>
+        $(document).ready(function (){
+            loadMyTask();
+
+        $.ajax({
+            url: 'user/currUser',
+            type: 'GET',
+            success : function (response){
+                document.getElementById('hello').append(response.username);
+            }, error : function (xhr, status, error){
+                console.log(error);
+            }
+        })
+
+        // All event config
+        $('#home').on('click', function(){
+            window.location.href='http://localhost:8080/'
+        });
+        $('#MyTask').click(function(event){
+            event.preventDefault();
+            loadMyTask();
+            $(this).css('font-weight', 'bolder');
+            $('#Assign').css('font-weight', 'inherit');
+            $('#Statistic').css('font-weight', 'inherit');
+            $('#Report').css('font-weight','inherit');
+        });
+        $('#Assign').click(function(event){
+            event.preventDefault();
+            loadAssign();
+            $(this).css('font-weight','bolder');
+            $('#MyTask').css('font-weight','inherit');
+            $('#Statistic').css('font-weight','inherit');
+            $('#Report').css('font-weight','inherit');
+        });
+        $('#Report').click(function(event){
+            event.preventDefault();
+            loadReport();
+            $(this).css('font-weight','bolder');
+            $('#MyTask').css('font-weight','inherit');
+            $('#Assign').css('font-weight','inherit');
+            $('#Statistic').css('font-weight','inherit');
+        })
+        $('#Statistic').click(function(event){
+            event.preventDefault();
+            loadStatictic();
+            $(this).css('font-weight','bolder');
+            $('#MyTask').css('font-weight','inherit');
+            $('#Assign').css('font-weight','inherit');
+            $('#Report').css('font-weight','inherit');
+        });
+
+        // Statistic button handle
+            function getCookie(cookieName) {
+                const cookies = document.cookie.split(';');
+
+                for (let cookie of cookies) {
+                    const [name, value] = cookie.trim().split('=');
+
+                    if (name === cookieName) {
+                        return value;
+                    }
+                }
+
+                return null; // Return null if the cookie is not found
+            }
+
+        function loadReport() {
+                var body = $('#Body');
+                body.empty();
+                var content =
+                '<div class="d-inline-flex kanban-board m-3" style="width: 100%; margin-left: 10%; border: solid black; border-radius: 10px;">'+
+                    '<div id="ToDo" class="kanban-column"'+
+                    'style="flex: 1; margin: 10px; padding: 15px; background-color: #f0f0f0; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">'+
+                        '<h3>Đã tiếp nhận</h3>'+
+                    '</div>'+
+
+                    '<div id="InProgress" class="kanban-column"'+
+                        'style="flex: 1; margin: 10px; padding: 15px; background-color: #f0f0f0; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">'+
+                        '<h3>Đang xử lý</h3>'+
+                    '</div>'+
+
+                    '<div id="Done" class="kanban-column"'+
+                         'style="flex: 1; margin: 10px; padding: 15px; background-color: #f0f0f0; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">'+
+                        '<h3>Hoàn thành</h3>'+
+                    '</div>'+
+                '</div>';
+                body.append(content);
+                $(document).ready(function () {
+                    var toDo = $('#ToDo');
+                    var inProgress = $('#InProgress');
+                    var done = $('#Done');
+                    // Fetching data for tasks
+                    $.ajax({
+                        url: 'assign/myTask',
+                        type: 'GET',
+                        success: function (result) {
+                            for (var i = 0; i < result.length; i++) {
+                                var status = result[i].taskID.status;
+                                var content = '<div class="kanban-card" draggable="true" id="' +
+                                    result[i].taskID.taskID +
+                                    '">' +
+                                    result[i].taskID.taskDescription +
+                                    '</div>';
+                                if (status === "Đã tiếp nhận") {
+                                    toDo.append(content);
+                                } else if (status === "Đang xử lý") {
+                                    inProgress.append(content);
+                                } else {
+                                    done.append(content);
+                                }
+                            }
+
+                            // After adding cards, apply drag-and-drop functionality
+                            applyDragAndDrop();
+                        },
+                        error: function (xhr, status, error) {
+                            console.log(error);
+                        }
+                    });
+
+                    // Function to apply drag-and-drop functionality
+                    function applyDragAndDrop() {
+                        const columns = document.querySelectorAll('.kanban-column');
+                        columns.forEach(column => {
+                            column.addEventListener('dragover', handleDragOver);
+                            column.addEventListener('drop', handleDrop);
+                        });
+
+                        // Make cards draggable
+                        const cards = document.querySelectorAll('.kanban-card');
+                        cards.forEach(card => {
+                            card.draggable = true;
+                            card.addEventListener('dragstart', handleDragStart);
+                        });
+                    }
+
+                    function handleDragStart(event) {
+                        event.dataTransfer.setData('text/plain', event.target.id);
+                    }
+
+                    function handleDragOver(event) {
+                        event.preventDefault();
+                    }
+
+                    function handleDrop(event) {
+                        event.preventDefault();
+                        const data = event.dataTransfer.getData('text/plain');
+                        const draggedElement = document.getElementById(data);
+                        const dropZone = event.target.closest('.kanban-column');
+                        const confirmed = window.confirm('Bạn có muốn thay đổi tiến độ nhiệm vụ này thành ' + dropZone.querySelector('h3').textContent + ' không?');
+                        if(confirmed){
+                            if (!draggedElement) {
+                                console.error('Dragged element not found:', data);
+                                return;
+                            }
+
+                            if (!dropZone) {
+                                console.error('Drop zone not found:', event.target);
+                                return;
+                            }
+                            var formData = {
+                                taskID : data,
+                                status : dropZone.querySelector('h3').textContent
+                            }
+
+                            $.ajax({
+                                url: 'task/report',
+                                type: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify(formData),
+                                success: function (result){
+                                    console.log(result)
+                                },error: function (xhr, status, error){
+                                    console.log(error);
+                                }
+                            })
+
+                            dropZone.appendChild(draggedElement);
+                        }
+                    }
+                });
+
+                //Make cards draggable
+                const cards = document.querySelectorAll('.kanban-card');
+                cards.forEach(card => {
+                    card.draggable = true;
+                    card.addEventListener('dragstart', handleDragStart);
+                });
+
+                function handleDragStart(event) {
+                    event.dataTransfer.setData('text/plain', event.target.id);
+                }
+            }
+
+        function loadStatictic() {
+                var body = $('#Body');
+                body.empty();
+                var content = '<h1 class="text-center">Thống kê kết quả những công việc có hạn hoàn thành trong khoảng thời gian </h1>' +
+                    '<form id="formStatistic">' +
+                    '<div class="d-flex">' +
+                    '<div class="container">' +
+                    '<div class="row">' +
+                            '<div class="col-md-6">' +
+                                '<h3 style="font-weight: bolder">Từ ngày:</h3>'+
+                                '<input type="date" id="startDate" class="form-control" required>'+
+                            '</div>'+
+                            '<div class="col-md-6">'+
+                                '<h3 style="font-weight: bolder">Đến ngày:</h3>'+
+                                '<input type="date" id="endDate" class="form-control" required>'+
+                            '</div>'+
+                            '<div class="search-container m-3 text-center">'+
+                                '<h3 class="font-weight-bold">NGƯỜI ĐƯỢC GIAO</h3>'+
+                                '<input id="userInput" class="form-control" type="text" placeholder="Search Users..." style="border-radius: 20px;" value="Tất cả">'+
+                                '<ul id="userSuggestionList"></ul>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="d-flex justify-content-center">'+
+                    '<button type="submit" class="mt-3 mb-3" style="border-radius: 10px; width: 150px; width: 15%;">THỐNG KÊ</button>'+
+                '</div>'+
+            '</form>'+
+            '<table id="table" style="table-layout: fixed; text-overflow: ellipsis;" class="table table-bordered">'+
+            '</table>'+
+            '<table id="secTable" style="table-layout: fixed; text-overflow: ellipsis;" class="table table-bordered mt-3">'+
+            '</table>';
+            // User fetching here
+            $.ajax({
+                url: 'http://localhost:8080/user/all',
+                type: 'GET',
+                success: function (response) {
+                    var allUsers = response.map(user => {
+                        return {
+                            id: user.userID,
+                            username: user.username
+                        };
+                    });
+                    function updateUserSuggestions(inputValue) {
+                        const userSuggestionList = $('#userSuggestionList');
+                        userSuggestionList.empty();
+
+                        if (inputValue) {
+                            const usernames = inputValue.split(',').map(username => username.trim());
+
+                            usernames.forEach(username => {
+                                const filteredUsers = allUsers.filter(user =>
+                                    user.username && user.username.toLowerCase().includes(username.toLowerCase())
+                                );
+
+                                filteredUsers.forEach(user => {
+                                    // Check if the user is not already selected
+                                        const listItem = $('<li>' + user.username + '</li>');
+                                        listItem.on('click', function () {
+                                            // Delete existing username and append the selected user.username
+                                            const updatedValue = inputValue.replace(username || '', '') + user.username;
+                                            $('#userInput').val(updatedValue); // Use val() to set the input value
+                                            // Hide user suggestion list
+                                            userSuggestionList.hide();
+                                        });
+                                        userSuggestionList.append(listItem);
+
+                                });
+                            });
+                        }
+
+                        // Show/hide user suggestion list based on the number of suggestions
+                        userSuggestionList.toggle(userSuggestionList.children().length > 0);
+                    }
+
+                    // Listen for the input event on the user input
+                    $('#userInput').on('input', function () {
+                        const inputValue = $(this).val();
+                        updateUserSuggestions(inputValue);
+                    });
+
+                    // Close user suggestion list when clicking outside the search container
+                    $(document).on('click', function (event) {
+                        const searchContainer = $('.search-container');
+                        const suggestionList = $('#userSuggestionList');
+
+                        if (!searchContainer.is(event.target) && searchContainer.has(event.target).length === 0 &&
+                            !suggestionList.is(event.target) && suggestionList.has(event.target).length === 0) {
+                            suggestionList.hide();
+                        }
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+            body.append(content);
+                document.getElementById('formStatistic').addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    // Get data
+                    var formData = {
+                        startDate: document.getElementById('startDate').value,
+                        endDate: document.getElementById('endDate').value,
+                        specUser: document.getElementById('userInput').value
+                    };
+                    var OK =0, notOK=0, done=0, notDone=0, notEval=0;
+                    var table = $('#table');
+                    table.empty();
+                    var tableContent =
+                        '<thead>' +
+                            '<tr class="text-center">' +
+                            '<th scope="col" style="width: 100px;">Người Giao</th>' +
+                            '<th scope="col" style="width: 300px;">Công Việc</th>' +
+                            '<th scope="col" style="width: 100px;">Người Xử Lý</th>' +
+                            '<th scope="col" style="width: 100px;">Ngày Giao</th>' +
+                            '<th scope="col" style="width: 100px;">Ngày Kết Thúc</th>' +
+                            '<th scope="col" style="width: 100px;">Tiến Độ</th>' +
+                            '<th scope="col" style="width: 80px;">Đánh Giá</th>' +
+                            '<th scope="col" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Ghi Chú</th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '<tbody>';
+                    $.ajax({
+                        url: 'task/statistic',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(formData),
+                        success: function (result) {
+                            result.forEach(function (task) {
+                                tableContent +=
+                                    '<tr class="text-center">' +
+                                        '<td>' + task.taskGiver.username + '</td>' +
+                                        '<td>' + task.taskID.taskDescription + '</td>' +
+                                        '<td>' + task.taskRecipient.username + '</td>' +
+                                        '<td>' + task.taskID.startDate + '</td>' +
+                                        '<td>' + task.taskID.deadline + '</td>' +
+                                        '<td>' + task.taskID.status + '</td>';
+                                        if(task.taskID.status == "Hoàn thành"){
+                                            done++;
+                                        }else{
+                                            notDone++;
+                                        }
+                                    if(task.taskID.result === null){
+                                        tableContent += '<td> CHƯA ĐÁNH GIÁ </td>'
+                                        notEval++;
+                                    }else{
+                                        tableContent += '<td>' + task.taskID.result + '</td>'
+                                        if(task.taskID.result == "ĐẠT"){
+                                            OK++;
+                                        }else{
+                                            notOK++;
+                                        }
+                                    }
+                                $.ajax({
+                                    url: 'issue/find/' + task.taskID.taskID,
+                                    type: 'GET',
+                                    async: false,
+                                    success: function (issue) {
+                                        tableContent += '<td>'+issue.description+'</td>';
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.log(error);
+                                    }
+                                });
+                                tableContent += '</tr>';
+                            });
+                            tableContent += '</tbody>' +
+                                '</table>';
+                            table.append(tableContent);
+                            // Create summary table
+                            content =
+                                    '<tbody>' +
+                                        '<tr>' +
+                                            '<td>Đối tượng thống kê</td>'+
+                                            '<td>Nhiệm vụ hoàn thành</td>'+
+                                            '<td>Nhiệm vụ chưa hoàn thành</td>'+
+                                            '<td>Nhiệm vụ đạt</td>'+
+                                            '<td>Nhiệm vụ không đạt</td>'+
+                                            '<td>Nhiệm vụ chưa đánh giá</td>'+
+                                        '</tr>'+
+                                        '<tr>' +
+                                            '<td>' + document.getElementById('userInput').value + '</td>'+
+                                            '<td>' + done + '</td>'+
+                                            '<td>' + notDone + '</td>'+
+                                            '<td>' + OK + '</td>'+
+                                            '<td>' + notOK + '</td>'+
+                                            '<td>' + notEval + '</td>'+
+                                        '</tr>'+
+                                    '</tbody>';
+                            var sectable = $('#secTable');
+                            sectable.empty();
+                            sectable.append(content);
+                        },
+                        error: function (xhr, status, error) {
+                            console.log(error);
+                        }
+                    });
+                });
+        }
+
+        function loadMyTask() {
+            var body = $('#Body');
+            body.empty();
+            var content = '<table class="table table-bordered" style="font-size: 16px">' +
+                '<thead class="thead-light">' +
+                '<tr class="text-center">' +
+                '<th>Nhiệm vụ</th>\n' +
+                '<th>Người giao</th>\n' +
+                '<th>Ngày được giao</th>\n' +
+                '<th>Ngày kết thúc</th>\n' +
+                '<th>Tình trạng</th>\n' +
+                '<th></th>' +
+                '</tr>\n' +
+                '</thead>\n' +
+                '<tbody id="tBody">';
+            $.ajax({
+                url: '/assign/myTask',
+                type: 'GET',
+                success: function (result) {
+                    result.forEach(function (task) {
+                        content +=
+                            '<tr class="text-center">' +
+                            '<td>' + task.taskID.taskDescription + '</td>' +
+                            '<td>'
+                        $.ajax({
+                            url: '/assign/who/' + task.taskID.taskID,
+                            type: 'GET',
+                            async: false,
+                            success: function (data) {
+                                content += data;
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                            }
+                        })
+                        content += '</td>' +
+                            '<td>' + task.taskID.startDate + '</td>' +
+                            '<td>' + task.taskID.deadline + '</td>' +
+                            '<td>' + task.taskID.status + '</td>'
+                                content += '<td className="d-flex justify-content-center">' +
+                                    '<a href="http://localhost:8080/assignTo/' + task.taskID.taskID + '">' +
+                                        '<button className="btn btn-primary" style="width: 100px; border-radius: 10px;">CHI TIẾT</button>' +
+                                    '</a>' +
+                                '</td>' +
+                                '</tr>'
+                    })
+                    content += '</tbody>' + '</table>'
+                    body.append(content);
+                }, error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            })
+        }
+
+        function loadAssign() {
+                var body = $('#Body');
+                body.empty();
+                var content =
+                    `<div class="d-flex justify-content-end">
+            <a href="http://localhost:8080/newtask">
+                <button class="m-2" style="border-radius: 10px;" value="THÊM CÔNG VIỆC">THÊM CÔNG VIỆC</button>
+            </a>
+        </div>
+        <table class="table table-bordered" style="font-size: 16px">
+            <thead class="thead-light">
+                <tr class="text-center">
+                    <th>Nhiệm vụ</th>
+                    <th>Người xử lý</th>
+                    <th>Ngày được giao</th>
+                    <th>Ngày kết thúc</th>
+                    <th>Ghi chú</th>
+                    <th>Tình trạng</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tBody">`;
+
+                $.ajax({
+                    url: 'http://localhost:8080/assign/created',
+                    type: 'GET',
+                    success: function (result) {
+                        var userCookieValue = Cookies.get('user');
+                        result.forEach(function (task) {
+                            if (task.taskGiver.userID == userCookieValue) {
+                                content +=
+                                    `<tr class="text-center">
+                            <td>${task.taskID.taskDescription}</td>
+                            <td>${task.taskRecipient.username}</td>
+                            <td>${task.taskID.startDate}</td>
+                            <td>${task.taskID.deadline}</td>`;
+
+                                $.ajax({
+                                    url: `http://localhost:8080/issue/find/${task.taskID.taskID}`,
+                                    type: 'GET',
+                                    async:false,
+                                    success: function (response) {
+                                        content += `<td>${response.description}</td>`;
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.log(error);
+                                    }
+                                });
+
+                                content +=
+                                    `<td>${task.taskID.status}</td>`;
+                                if (task.taskID.status === "Hoàn thành") {
+                                    if(task.taskID.result === null){
+                                        content +=
+                                            `<td class="d-flex justify-content-center">
+                                            <a href="http://localhost:8080/evaluate/${task.taskID.taskID}">
+                                                <button style="width: 100px; border-radius: 10px;">ĐÁNH GIÁ</button>
+                                            </a>
+                                        </td>
+                                    </tr>`;
+                                    } else {
+                                        content +=
+                                            '<td class="text-center">'+
+                                                task.taskID.result
+                                            '</td>'+
+                                        '</tr>';
+                                    }
+                                } else {
+                                    content +=
+                                        '<td>'+
+                                        '</td>'+
+                                    '</tr>';
+                                }
+                            }
+                        });
+                        body.append(content);
+                    }
+                });
+            }
+
+        })
+</script>
+</body>
+</html>
