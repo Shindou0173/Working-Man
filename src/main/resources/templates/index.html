@@ -42,7 +42,7 @@
     <!-- Logo start -->
     <div>
         <button id="home" type="button" class="btn btn-light" style="border: #F0F0F0;">
-            <img src="/working-man.jpg" class="img-fluid" style="width: 100px; height: 50px">
+            <img src="/working-man.jpg" class="img-fluid" style="width: 120px; height: 120px">
             <h1>Working Man</h1>
         </button>
     </div>
@@ -81,11 +81,11 @@
         <!-- Navbar End -->
 
         <!-- User field start -->
-        <div class="dropdown" style="margin-top: 2% ;margin-left: 10%; margin-right: 2%;">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="Truong Nguyen Phu Quy Photo.jpg" alt="Profile" class="profile-image" width="30%;" style="border-radius: 50%;">
+        <div class="dropdown" style="margin-top: 2%; margin-left: 10%; margin-right: 2%;">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" style="width: 200px;" data-bs-toggle="dropdown" aria-expanded="false">
+                <img id="currUser" src="" alt="Profile" class="profile-image" style="width: 120px; height: 120px; border-radius: 50%;">
             </button>
-            <h4 id="hello" class="d-flex justify-content-center">Xin chào, </h4>
+            <h4 id="hello" class="d-flex justify-content-center" width="300px">Xin chào, </h4>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" href="http://localhost:8080/profile">Hồ sơ</a>
                 <a class="dropdown-item" href="http://localhost:8080/login">Đăng xuất</a>
@@ -121,6 +121,7 @@
             type: 'GET',
             success : function (response){
                 document.getElementById('hello').append(response.username);
+                document.getElementById('currUser').src = response.image;
             }, error : function (xhr, status, error){
                 console.log(error);
             }
@@ -322,8 +323,8 @@
                                 '<h3 style="font-weight: bolder">Đến ngày:</h3>'+
                                 '<input type="date" id="endDate" class="form-control" required>'+
                             '</div>'+
-                            '<div class="search-container m-3 text-center">'+
-                                '<h3 class="font-weight-bold">NGƯỜI ĐƯỢC GIAO</h3>'+
+                            '<div class="search-container text-center">'+
+                                '<h3 class="font-weight-bold mt-3">ĐỐI TƯỢNG THỐNG KÊ</h3>'+
                                 '<input id="userInput" class="form-control" type="text" placeholder="Search Users..." style="border-radius: 20px;" value="Tất cả">'+
                                 '<ul id="userSuggestionList"></ul>'+
                             '</div>'+

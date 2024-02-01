@@ -53,11 +53,11 @@
         <!-- Navbar End -->
 
         <!-- User field start -->
-        <div class="dropdown" style="margin-top: 2% ;margin-left: 10%; margin-right: 2%;">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="Truong Nguyen Phu Quy Photo.jpg" alt="Profile" class="profile-image" width="30%;" style="border-radius: 50%;">
+        <div class="dropdown" style="margin-top: 2%; margin-left: 10%; margin-right: 2%;">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" style="width: 200px;" data-bs-toggle="dropdown" aria-expanded="false">
+                <img id="currUser" src="" alt="Profile" class="profile-image" style="width: 120px; height: 120px; border-radius: 50%;">
             </button>
-            <h4 id="hello" class="d-flex justify-content-center">Xin chào, </h4>
+            <h4 id="hello" class="d-flex justify-content-center" width="300px">Xin chào, </h4>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" href="http://localhost:8080/profile">Hồ sơ</a>
                 <a class="dropdown-item" href="http://localhost:8080/login">Đăng xuất</a>
@@ -83,12 +83,24 @@
 <!--BODY END-->
 <!--Function Start here-->
 <script>
+
+    $.ajax({
+        url: 'user/currUser',
+        type: 'GET',
+        success : function (response){
+            document.getElementById('hello').append(response.username);
+            document.getElementById('currUser').src = response.image;
+        }, error : function (xhr, status, error){
+            console.log(error);
+        }
+    })
+
     $(document).ready(function(){
         var body = $('#formInfo');
         body.empty();
         var content = '<div class="form-group text-center">\n' +
             '            <label class="font-weight-bold">TÀI KHOẢN</label>\n' +
-            '            <input id="Username" type="text" class="form-control" style="border-radius: 20px;" required>\n' +
+            '            <input id="Username" type="text" class="form-control" style="border-radius: 20px;" readonly>\n' +
             '        </div>\n' +
             '\n' +
             '        <div class="form-group text-center">\n' +
@@ -116,7 +128,6 @@
             url: 'http://localhost:8080/user/currUser',
             type: 'GET',
             success: function (response){
-                console.log(response)
                 $('#Username').val(response.username);
                 $('#Email').val(response.email);
                 $('#Password').val(response.password);
@@ -127,10 +138,29 @@
         })
     })
 
-     // document.getElementById('formRegister').addEventListener('submit', function (event){
-     //     event.preventDefault();
-     //
-     // })
+     document.getElementById('formInfo').addEventListener('submit', function (event){
+         event.preventDefault();
+         var formData = new FormData();
+         formData.append('username', $('#Username').val());
+         formData.append('password', $('#Password').val());
+         formData.append('email', $('#Email').val());
+         formData.append('image', $('#image')[0].files[0]);
+
+         $.ajax({
+             url: 'http://localhost:8080/user/update',
+             type: 'POST',
+             data: formData,
+             contentType: false,
+             processData: false,
+             success: function (response) {
+                 alert("Thay đổi thông tin thành công!");
+                 window.location.replace("http://localhost:8080");
+             },
+             error: function (xhr, status, error) {
+                 alert("Lỗi xảy ra, vui lòng kiểm tra lại thông tin đã điền!");
+             }
+         });
+     })
 </script>
 </body>
 </html>

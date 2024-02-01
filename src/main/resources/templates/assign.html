@@ -67,11 +67,11 @@
         <!-- Navbar End -->
 
         <!-- User field start -->
-        <div class="dropdown" style="margin-top: 2% ;margin-left: 10%; margin-right: 2%;">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="Truong Nguyen Phu Quy Photo.jpg" alt="Profile" class="profile-image" width="30%;" style="border-radius: 50%;">
+        <div class="dropdown" style="margin-top: 2%; margin-left: 10%; margin-right: 2%;">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" style="width: 200px;" data-bs-toggle="dropdown" aria-expanded="false">
+                <img id="currUser" src="" alt="Profile" class="profile-image" style="width: 120px; height: 120px; border-radius: 50%;">
             </button>
-            <h4 id="hello" class="d-flex justify-content-center">Xin chào, </h4>
+            <h4 id="hello" class="d-flex justify-content-center" width="300px">Xin chào, </h4>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" href="http://localhost:8080/profile">Hồ sơ</a>
                 <a class="dropdown-item" href="http://localhost:8080/login">Đăng xuất</a>
@@ -118,6 +118,18 @@
 
 
 <script>
+
+    $.ajax({
+        url: 'user/currUser',
+        type: 'GET',
+        success : function (response){
+            document.getElementById('hello').append(response.username);
+            document.getElementById('currUser').src = response.image;
+        }, error : function (xhr, status, error){
+            console.log(error);
+        }
+    })
+
     $('#home').on('click', function(){
         window.location.href='http://localhost:8080/'
     })

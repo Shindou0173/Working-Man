@@ -32,4 +32,10 @@ public class UserService {
         user.setPermission(2);
         repository.save(user);
     }
+    public User findUserByUsername(String username){
+        return repository.findUserByUsername(username);
+    }
+    public void save(User user){
+        repository.save(user);
+    }
 }
