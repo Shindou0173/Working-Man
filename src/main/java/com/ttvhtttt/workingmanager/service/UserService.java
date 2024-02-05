@@ -11,8 +11,8 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepository repository;
-    public List<User> listAll(){
-        return repository.findAll();
+    public List<User> listAllLowerUser(int permission){
+        return repository.findUsersWithPermissionLevelLowerThan(permission);
     }
     public User findUserById(String id){
         return repository.findById(Integer.parseInt(id)).get();
@@ -38,4 +38,5 @@ public class UserService {
     public void save(User user){
         repository.save(user);
     }
+    public int checkPer(int userID){return repository.findById(userID).get().getPermission();}
 }

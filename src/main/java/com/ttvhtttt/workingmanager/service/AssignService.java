@@ -45,10 +45,10 @@ public class AssignService {
         List<Assign> list = repository.findAllByTaskGiver(curr);
         return list;
     }
-    public String whoGiveMeThis(String taskID, String taskRecipient){
+    public User findByTaskIdAndTaskRecipient(String taskID, String taskRecipient){
         Task task = taskRepository.findById(Integer.parseInt(taskID)).get();
         User user = userRepository.findById(Integer.parseInt(taskRecipient)).get();
-        return repository.findByTaskRecipientAndTaskID(user, task).getTaskGiver().getUsername();
+        return repository.findByTaskRecipientAndTaskID(user, task).getTaskGiver();
     }
     public List<Assign> statistic(List<Task> list, String specUser){
         List<Assign> result = new ArrayList<>();

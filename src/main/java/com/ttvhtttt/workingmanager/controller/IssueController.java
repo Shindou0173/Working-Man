@@ -14,7 +14,12 @@ public class IssueController {
     private IssueService service;
     @PostMapping("/new")
     public ResponseEntity newIssue(@RequestBody Map<String, String> formData){
-        service.newIssue(formData.get("issueName"), formData.get("issueDescription"), formData.get("taskID"));
+        service.newIssue(formData.get("issueDescription"), formData.get("taskID"));
+        return ResponseEntity.ok("");
+    }
+    @PostMapping("/update")
+    public ResponseEntity update(@RequestBody Map<String, String> formData){
+        service.update(formData.get("issueDescription"), formData.get("taskID"));
         return ResponseEntity.ok("");
     }
     @GetMapping("/find/{taskID}")

@@ -1,10 +1,8 @@
 package com.ttvhtttt.workingmanager.controller;
 
 import com.ttvhtttt.workingmanager.entity.Task;
-import com.ttvhtttt.workingmanager.service.AssignService;
-import com.ttvhtttt.workingmanager.service.IssueService;
-import com.ttvhtttt.workingmanager.service.TaskService;
-import com.ttvhtttt.workingmanager.service.UserService;
+import com.ttvhtttt.workingmanager.entity.User;
+import com.ttvhtttt.workingmanager.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +22,18 @@ public class TaskController {
     @Autowired
     private AssignService assignService;
     @Autowired
+    private EmailService emailService;
+    @Autowired
     private UserService userService;
     @PostMapping("/save")
     public ResponseEntity save(@RequestBody Map<String, String> formData, @CookieValue(name = "user") String userID){
         Task task = service.save(formData.get("taskDescription"), formData.get("deadline"));
-        issueService.newIssue("Ghi chú", formData.get("issue"), Integer.toString(task.getTaskID()));
+        issueService.newIssue(formData.get("issue"), Integer.toString(task.getTaskID()));
         assignService.give(userID, formData.get("taskRecipient"), Integer.toString(task.getTaskID()));
+        User taskRecipient = userService.findUserByUsername(formData.get("taskRecipient"));
+        if(taskRecipient != null){
+            emailService.sendMessage(taskRecipient.getEmail(), "Nhiệm vụ mới", userService.findUserById(userID).getUsername()+" đã giao nhiệm vụ mới cho bạn, vui lòng kiểm tra!");
+        }
         return ResponseEntity.ok("");
     }
     @PostMapping("/subtask")
@@ -49,13 +53,16 @@ public class TaskController {
         }
     }
     @PostMapping("/report")
-    public ResponseEntity report(@RequestBody Map<String, String> formData){
+    public ResponseEntity report(@RequestBody Map<String, String> formData, @CookieValue(name = "user") String userID){
         service.update(Integer.parseInt(formData.get("taskID")), formData.get("status"));
+        if(formData.get("status").equals("Hoàn thành")){
+            User taskRecipient = userService.findUserById(userID);
+            User taskGiver = assignService.findByTaskIdAndTaskRecipient(formData.get("taskID"), Integer.toString(taskRecipient.getUserID()));
+            if(taskRecipient != null){
+                emailService.sendMessage(taskGiver.getEmail(), "Nhiệm vụ mới", taskRecipient.getUsername()+" đã hoàn thành nhiệm vụ mới bạn giao, vui lòng kiểm tra!");
+            }
+        }
         return ResponseEntity.ok("Update status OK!!!");
-    }
-    @PostMapping("/assign")
-    public ResponseEntity assign(@RequestBody Map<String, String> formData){
-        return ResponseEntity.ok("");
     }
     @GetMapping("/find/{taskId}")
     public ResponseEntity find(@PathVariable String taskId){

@@ -78,8 +78,13 @@
             contentType: 'application/json',
             data: JSON.stringify(formData),
             success: function(response) {
-                alert('Đăng nhập thành công!!');
-                window.location.replace('http://localhost:8080');
+                if(response === 'admin'){
+                    alert("Đăng nhập thành công, quyền admin!!");
+                    window.location.replace('http://localhost:8080/admin');
+                }else{
+                    alert("Đăng nhập thành công!!");
+                    window.location.replace('http://localhost:8080');
+                }
             },
             error: function(xhr, status, error) {
                 console.log(error);

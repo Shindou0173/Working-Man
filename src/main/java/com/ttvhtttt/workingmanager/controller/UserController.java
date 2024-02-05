@@ -19,9 +19,9 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService service;
-    @GetMapping("/all")
-    public ResponseEntity listAll(){
-        return ResponseEntity.ok(service.listAll());
+    @GetMapping("/lower")
+    public ResponseEntity listAll(@CookieValue(name = "user") String currUser){
+        return ResponseEntity.ok(service.listAllLowerUser(service.findUserById(currUser).getPermission()));
     }
     @GetMapping("/currUser")
     public ResponseEntity currUser(@CookieValue(name = "user") String userID){
@@ -37,7 +37,11 @@ public class UserController {
             cookie.setPath("/");
             cookie.setMaxAge(36000);
             response.addCookie(cookie);
-            return ResponseEntity.ok("Đăng nhập thành công");
+            if(service.checkPer(service.checkLogin(formData.get("username"), formData.get("password"))) == 99){
+                return ResponseEntity.ok("admin");
+            }else{
+                return ResponseEntity.ok("user");
+            }
         }
     }
     @PostMapping("/register")

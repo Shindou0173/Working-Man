@@ -108,8 +108,13 @@
             <input id="userInput" class="form-control" type="text" placeholder="Search Users..." style="border-radius: 20px;">
             <ul id="userSuggestionList"></ul>
         </div>
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary" style="border-radius: 10px; width: 150px;">GIAO VIỆC</button>
+        <div class="d-flex" style="margin-left: 25%;">
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary" style=" height: 80px; border-radius: 10px; width: 150px;">GIAO VIỆC</button>
+            </div>
+            <div class="text-center">
+                <button type="button" id="newIssue" class="btn btn-primary" style="height: 80px; border-radius: 10px; width: 150px; margin-left: 25%;">THAY ĐỔI CHI TIẾT</button>
+            </div>
         </div>
     </form>
 </div>
@@ -120,11 +125,11 @@
 <script>
 
     $.ajax({
-        url: 'user/currUser',
+        url: 'http://localhost:8080/user/currUser',
         type: 'GET',
         success : function (response){
             document.getElementById('hello').append(response.username);
-            document.getElementById('currUser').src = response.image;
+            document.getElementById('currUser').src = '../'+response.image;
         }, error : function (xhr, status, error){
             console.log(error);
         }
@@ -176,7 +181,7 @@
 
     // User fetching here
     $.ajax({
-        url: 'http://localhost:8080/user/all',
+        url: 'http://localhost:8080/user/lower',
         type: 'GET',
         success: function (response) {
             var allUsers = response.map(user => {
@@ -249,7 +254,7 @@
         event.preventDefault();
         var formData = {
             taskID : taskID,
-            taskRecipient: document.getElementById('userInput').value
+            taskRecipient: document.getElementById('userInput').value.trim().replace(/,$/, '')
         }
         console.log(formData)
         $.ajax({
@@ -265,6 +270,26 @@
                 console.log(error);
             }
         });
+    })
+
+    document.getElementById('newIssue').addEventListener('click', function (event){
+        event.preventDefault();
+        var formIssue = {
+            taskID : taskID,
+            issueDescription : document.getElementById('Issue').value
+        }
+        $.ajax({
+            url: 'http://localhost:8080/issue/update',
+            type: 'POST',
+            contentType:  'application/json',
+            data: JSON.stringify(formIssue),
+            success: function (response){
+                alert("Thêm chi tiết thành công");
+                window.location.reload();
+            }, error : function (xhr, status, error){
+                console.log(error);
+            }
+        })
     })
 </script>
 </body>
